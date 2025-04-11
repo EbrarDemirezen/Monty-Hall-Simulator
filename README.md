@@ -18,7 +18,7 @@ This project is primarily built with Java for core game logic and will be extend
 * **GitHub** – Project planning, collaboration, and issue tracking
 * **Libraries, frameworks** - (to be decided)
 
-## 🚀 Installation & Usage
+## 🚀 Installation & UsageHello
 
 **Note:** This section will evolve as the project progresses.
 
