@@ -2,6 +2,20 @@
 
 In this project, our goal is to create an interactive app/website designed to explore the famous probability puzzle known as the Monty Hall Problem. Inspired by the classic game show scenario, our aim is to give the users a chance to test their intuition, learn about probability, and have fun while doing it.
 
+## 🧠 What is the Monty Hall Problem?
+
+The Monty Hall Problem is a probability puzzle based on a game show scenario:
+
+- You're on a game show with **3 closed doors**.
+- Behind one door is a **car** (you win!), behind the other two are **goats**.
+- You pick a door (say, Door 1).
+- The host, Monty, who **knows what's behind each door**, opens one of the **other two doors**, always revealing a **goat**.
+- Then he asks: **“Do you want to switch your choice or stay?”**
+
+Intuitively, it feels like it doesn’t matter — but **switching actually doubles your chances** of winning (from 1/3 to 2/3).
+🐐
+
+
 ## 🎯 Project Goal
 
 To build a fun and educational application that simulates the Monty Hall problem, enabling users to:
