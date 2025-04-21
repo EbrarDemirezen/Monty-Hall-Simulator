@@ -1,0 +1,145 @@
+// src/main/MontyHall/GameController.java
+package src.main.MontyHall;
+
+import src.main.MontyHall.GameLogic;
+import java.util.Random;
+
+/**
+ * Serves as a bridge between the web UI and the game logic.
+ * Will eventually handle HTTP requests from the frontend.
+ */
+public class GameController {
+    private GameLogic game;
+    private int gamesPlayed = 0;
+    private int stayWins = 0;
+    private int switchWins = 0;
+    private int stayGames = 0;
+    private int switchGames = 0;
+    
+    public GameController() {
+        game = new GameLogic();
+    }
+    
+    public void resetGame() {
+        game.resetGame();
+    }
+    
+    public void setDoorCount(int count) {
+        // Reset statistics when changing door count
+        this.gamesPlayed = 0;
+        this.stayWins = 0;
+        this.switchWins = 0;
+        this.stayGames = 0;
+        this.switchGames = 0;
+        
+        // Create a new game with specified door count
+        this.game = new GameLogic(count);
+    }
+    
+    public int getDoorCount() {
+        return game.getDoorCount();
+    }
+    
+    public void makeInitialChoice(int doorNumber) {
+        if (game.getPlayerChoice() == -1) {
+            game.makeInitialChoice(doorNumber);
+        }
+    }
+    
+    public void stayWithCurrentChoice() {
+        if (game.getRevealedDoor() != -1 && !game.isGameOver()) {
+            game.stayWithCurrentChoice();
+            stayGames++;
+            updateStatistics();
+        }
+    }
+    
+    public void switchDoor() {
+        if (game.getRevealedDoor() != -1 && !game.isGameOver()) {
+            game.switchDoor();
+            switchGames++;
+            updateStatistics();
+        }
+    }
+    
+    public void runAutoPlay(int iterations) {
+        Random random = new Random();
+        
+        for (int i = 0; i < iterations; i++) {
+            // Create two separate games to test both strategies
+            GameLogic stayGame = new GameLogic(game.getDoorCount());
+            GameLogic switchGame = new GameLogic(game.getDoorCount());
+            
+            // Make random initial choices for both games
+            int initialChoice = random.nextInt(game.getDoorCount());
+            stayGame.makeInitialChoice(initialChoice);
+            switchGame.makeInitialChoice(initialChoice);
+            
+            // Apply stay strategy
+            stayGame.stayWithCurrentChoice();
+            stayGames++;
+            if (stayGame.hasWon()) {
+                stayWins++;
+            }
+            
+            // Apply switch strategy
+            switchGame.switchDoor();
+            switchGames++;
+            if (switchGame.hasWon()) {
+                switchWins++;
+            }
+            
+            gamesPlayed += 2;
+        }
+        
+        // Reset the current game so player can start fresh
+        resetGame();
+    }
+    
+    private void updateStatistics() {
+        gamesPlayed++;
+        if (game.hasWon()) {
+            if (game.hasSwitched()) {
+                switchWins++;
+            } else {
+                stayWins++;
+            }
+        }
+    }
+    
+    public boolean isGameOver() {
+        return game.isGameOver();
+    }
+    
+    public boolean hasWon() {
+        return game.hasWon();
+    }
+    
+    public boolean hasSwitched() {
+        return game.hasSwitched();
+    }
+    
+    public GameLogic getGameState() {
+        return game;
+    }
+    
+    public int getGamesPlayed() {
+        return gamesPlayed;
+    }
+    
+    public int getStayWins() {
+        return stayWins;
+    }
+    
+    public int getSwitchWins() {
+        return switchWins;
+    }
+    
+    public double getStayWinRate() {
+        return stayGames > 0 ? (double) stayWins / stayGames * 100 : 0;
+    }
+    
+    public double getSwitchWinRate() {
+        return switchGames > 0 ? (double) switchWins / switchGames * 100 : 0;
+    }
+}
