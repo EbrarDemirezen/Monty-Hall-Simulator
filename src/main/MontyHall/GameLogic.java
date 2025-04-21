@@ -146,10 +146,10 @@ public class GameLogic {
     }
     
     public int getCarPosition() {
-        // Only return car position if game is over
+        /* // Only return car position if game is over
         if (!gameOver) {
             throw new IllegalStateException("Game is not over yet");
-        }
+        } */
         return carPosition;
     }
 }
