@@ -22,13 +22,18 @@ public class HtmlGenerator {
                 "        body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; background-color: #f5f5f5; }\n");
         html.append("        h1 { color: #2c3e50; margin-bottom: 10px; }\n");
         html.append("        .subtitle { color: #7f8c8d; margin-top: 0; }\n");
-        html.append(
-                "        .game-container { margin: 30px auto; max-width: 1000px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }\n");
-        html.append(
-                "        .doors-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; }\n");
-                
-                html.append(
-                    "        .door { width: 170px; height: 260px; background-size: contain; background-repeat: no-repeat; background-position: center; cursor: pointer; position: relative; transition: all 0.3s ease; margin: 10px; }\n");
+        html.append("        .game-container { margin: 30px auto; max-width: 1000px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }\n");
+        html.append("        .doors-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; }\n");
+        //!       
+        html.append("        .door { width: 170px; height: 260px; background-size: contain; background-repeat: no-repeat; background-position: center; cursor: pointer; position: relative; transition: all 0.3s ease; margin: 10px; }\n");
+        //!
+        // Only apply hover effect when no door is selected (before first choice)
+        html.append("        .doors-container:not(:has(.selected)) .door:hover { border: 4px solid #f1c40f; box-shadow: 0 0 15px #f1c40f; }\n");
+
+        //! Red marked lines indicate the changed codes in this current branch.
+        
+        //!
+        // html.append("        .door:hover { border: 4px solid #f1c40f; box-shadow: 0 0 15px #f1c40f; }\n");
                             
         html.append("        .door.door-1 { background-image: url('" + DOOR_1_IMAGE + "'); }\n");
         html.append("        .door.door-2 { background-image: url('" + DOOR_2_IMAGE + "'); }\n");
@@ -51,33 +56,42 @@ public class HtmlGenerator {
                 "        button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; background-color: #3498db; color: white; border: none; border-radius: 5px; transition: background-color 0.2s; }\n");
         html.append("        button:hover { background-color:rgb(185, 41, 87); }\n");
         html.append("        button:disabled { background-color: #95a5a6; cursor: not-allowed; }\n");
+        
+        //!
         html.append(
-                "        .status { font-size: 18px; margin: 20px 0; min-height: 50px; padding: 10px; background-color: #ecf0f1; border-radius: 5px; }\n");
+                "        .status { font-size: 20px; margin: 10px auto 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: all 0.3s ease; }\n");
+        html.append(
+                "        .status:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }\n");
+        
         html.append("        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }\n");
         html.append("        .win { background-color: #d5f5e3; color: #27ae60; }\n");
         html.append("        .lose { background-color: #fadbd8; color: #c0392b; }\n");
-        html.append(
-                "        .statistics { margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }\n");
-        html.append(
-                "        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }\n");
+        html.append("        .statistics { margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }\n");
+        html.append("        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }\n");
         html.append("        .stat-box { padding: 15px; border-radius: 5px; }\n");
         html.append("        .stay-stats { background-color: #e8f4f8; }\n");
         html.append("        .switch-stats { background-color: #e8f8ef; }\n");
-        html.append(
-                "        .explanation { margin-top: 30px; text-align: left; padding: 20px; background-color: #f9f9f9; border-radius: 5px; }\n");
+        html.append("        .explanation { margin-top: 30px; text-align: left; padding: 20px; background-color: #f9f9f9; border-radius: 5px; }\n");
         html.append("        .explanation h3 { margin-top: 0; }\n");
         html.append("        .tab-container { margin-top: 20px; }\n");
         html.append("        .tab-buttons { display: flex; justify-content: center; }\n");
-        html.append(
-                "        .tab-button { padding: 10px 20px; border: none; background-color: #ddd; cursor: pointer; }\n");
+        html.append("        .tab-button { padding: 10px 20px; border: none; background-color: #ddd; cursor: pointer; }\n");
         html.append("        .tab-button.active { background-color: #3498db; color: white; }\n");
         html.append("        .tab-content { display: none; padding: 20px; background-color: #f1f1f1; }\n");
         html.append("        .tab-content.active { display: block; }\n");
-        html.append(
-                "        .options { margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px; text-align: left; }\n");
+        html.append("        .options { margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px; text-align: left; }\n");
         html.append("        .options label { margin-right: 10px; }\n");
-        html.append(
-                "        .auto-play { margin-top: 20px; padding: 15px; background-color: #e8f8f8; border-radius: 5px; }\n");
+        html.append("        .auto-play { margin-top: 20px; padding: 15px; background-color: #e8f8f8; border-radius: 5px; }\n");
+        
+        //!----------------------------------------------------------------------------------------------------------------------------------
+        html.append("        .bar-chart { margin: 20px auto; max-width: 600px; }\n");
+        html.append("        .bar { height: 40px; margin: 15px 0; position: relative; background-color:rgb(242, 116, 116); border-radius: 4px; overflow: hidden; }\n");
+        html.append("        .wins-fill { height: 100%; background-color:rgb(255, 215, 0); transition: width 1s ease-in-out; }\n");
+        html.append("        .bar-label { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #000; font-weight: bold; }\n");
+        html.append("        .wins-value { position: absolute; right: 10px; top: 25%; transform: translateY(-50%); color: #196F3D; }\n");
+        html.append("        .losses-value { position: absolute; right: 10px; bottom: 25%; transform: translateY(50%); color: #922B21; }\n");
+        //!----------------------------------------------------------------------------------------------------------------------------------
+        
         html.append("    </style>\n");
         html.append("    <script>\n");
         html.append("        function toggleTab(tabId) {\n");
@@ -112,8 +126,9 @@ public class HtmlGenerator {
         boolean doorRevealed = controller.getGameState().getRevealedDoor() != -1;
         boolean gameOver = controller.getGameState().isGameOver();
 
+        //!
         if (!gameStarted) {
-            html.append("            Click on a door to start the game!\n");
+            html.append("            👆 Click on a door to start the game! 👆\n");
         } else if (doorRevealed && !gameOver) {
             html.append("            Door ").append(controller.getGameState().getRevealedDoor() + 1);
             html.append(" has been revealed to contain a goat! Will you stay with Door ");
@@ -198,7 +213,7 @@ public class HtmlGenerator {
                 "                <button id=\"btn-tab-explanation\" class=\"tab-button\" onclick=\"toggleTab('tab-explanation')\">Explanation</button>\n");
         html.append("            </div>\n");
 
-        // Statistics tab
+        //? Statistics tab
         html.append("            <div id=\"tab-stats\" class=\"tab-content active\">\n");
         html.append("                <h3>Game Statistics</h3>\n");
         html.append("                <p>Games played: ").append(controller.getGamesPlayed()).append("</p>\n");
@@ -216,6 +231,23 @@ public class HtmlGenerator {
                 .append(String.format("%.1f", controller.getSwitchWinRate())).append("%</p>\n");
         html.append("                    </div>\n");
         html.append("                </div>\n");
+        //!-----------------------------------------------------------------------------------------------------------------------------------
+        html.append("                <div class=\"bar-chart\">\n");
+        html.append("                    <h4>Strategy Performance</h4>\n");
+        html.append("                    <div class=\"bar\">\n");
+        html.append("                        <div class=\"wins-fill\" style=\"width: ").append(controller.getStayWinRate()).append("%;\"></div>\n");
+        html.append("                        <span class=\"bar-label\">Stay Strategy 🔒</span>\n");
+        html.append("                        <span class=\"wins-value\">Wins: ").append(controller.getStayWins()).append("</span>\n");
+        html.append("                        <span class=\"losses-value\">Losses: ").append(controller.getStayGames() - controller.getStayWins()).append("</span>\n");
+        html.append("                    </div>\n");
+        html.append("                    <div class=\"bar\">\n");
+        html.append("                        <div class=\"wins-fill\" style=\"width: ").append(controller.getSwitchWinRate()).append("%;\"></div>\n");
+        html.append("                        <span class=\"bar-label\">Switch Strategy 🔄</span>\n");
+        html.append("                        <span class=\"wins-value\">Wins: ").append(controller.getSwitchWins()).append("</span>\n");
+        html.append("                        <span class=\"losses-value\">Losses: ").append(controller.getSwitchGames() - controller.getSwitchWins()).append("</span>\n");
+        html.append("                    </div>\n");
+        html.append("                </div>\n");
+       //!-----------------------------------------------------------------------------------------------------------------------------------
 
         // Auto-play section
         html.append("                <div class=\"auto-play\">\n");
