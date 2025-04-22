@@ -15,6 +15,15 @@ The Monty Hall Problem is a probability puzzle based on a game show scenario:
 Intuitively, it feels like it doesn’t matter — but **switching actually doubles your chances** of winning (from 1/3 to 2/3).
 🐐
 
+## 🕹️ How to Run
+Assuming that Java (OpenJDK) is installed:
+```
+git clone <ssh-address>
+cd src/main/MontyHall
+javac Main.java GameLogic.java
+java Main
+```
+Lastly, open the local server URL provided in the terminal.
 
 ## 🎯 Project Goal
 
