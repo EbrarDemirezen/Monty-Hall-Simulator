@@ -142,4 +142,13 @@ public class GameController {
     public double getSwitchWinRate() {
         return switchGames > 0 ? (double) switchWins / switchGames * 100 : 0;
     }
+//!-------------------------------------------------------------------
+    // Add these two new getter methods
+    public int getStayGames() {
+        return stayGames;
+    }
+
+    public int getSwitchGames() {
+        return switchGames;
+    }
 }
