@@ -1,35 +1,155 @@
 package src.main.MontyHall;
 
+import com.sun.net.httpserver.HttpExchange;
+import com.sun.net.httpserver.HttpHandler;
+import com.sun.net.httpserver.HttpServer;
+import src.main.MontyHall.GameController;
+import src.main.MontyHall.HtmlGenerator;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.InetSocketAddress;
+import java.util.HashMap;
+import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.io.InputStream;
+
 public class Main {
+    private static GameController gameController = new GameController();
+
     public static void main(String[] args) {
-        System.out.println("Monty Hall Simulator");
-        System.out.println("===================");
-        
-        // This will eventually initialize our web application
-        // For now, we'll run a simple simulation to test the game logic
-        
-        int stayWins = 0;
-        int switchWins = 0;
-        int totalGames = 10000;
-        
-        for (int i = 0; i < totalGames; i++) {
-            GameLogic stayGame = new GameLogic();
-            stayGame.makeInitialChoice(0); // Always choose door 0
-            stayGame.stayWithCurrentChoice();
-            if (stayGame.hasWon()) {
-                stayWins++;
+        try {
+            // Create a simple HTTP server on port 8080
+            HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
+
+            // Add handler for static files
+            server.createContext("/images", new StaticFileHandler("src/main/resources/static/images"));
+
+            // Create a context for handling requests
+            server.createContext("/", new GameHandler());
+
+            // Start the server
+            server.start();
+
+            System.out.println("Monty Hall Simulator running at http://localhost:8080/");
+            System.out.println("Press Ctrl+C to stop the server");
+
+        } catch (IOException e) {
+            System.out.println("Error starting server: " + e.getMessage());
+        }
+    }
+
+    static class GameHandler implements HttpHandler {
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            // Parse query parameters
+            String query = exchange.getRequestURI().getQuery();
+            Map<String, String> params = parseQueryParams(query);
+
+            // Handle different actions
+            if (params.containsKey("action")) {
+                String action = params.get("action");
+
+                switch (action) {
+                    case "reset":
+                        gameController.resetGame();
+                        break;
+                    case "choose":
+                        if (params.containsKey("door")) {
+                            try {
+                                int doorNumber = Integer.parseInt(params.get("door"));
+                                gameController.makeInitialChoice(doorNumber);
+                            } catch (NumberFormatException e) {
+                                // Invalid door number, ignore
+                            }
+                        }
+                        break;
+                    case "stay":
+                        gameController.stayWithCurrentChoice();
+                        break;
+                    case "switch":
+                        gameController.switchDoor();
+                        break;
+                    case "auto-play":
+                        if (params.containsKey("iterations")) {
+                            try {
+                                int iterations = Integer.parseInt(params.get("iterations"));
+                                gameController.runAutoPlay(iterations);
+                            } catch (NumberFormatException e) {
+                                // Invalid iterations, ignore
+                            }
+                        }
+                        break;
+                    case "set-doors":
+                        if (params.containsKey("count")) {
+                            try {
+                                int count = Integer.parseInt(params.get("count"));
+                                if (count >= 3) { // Minimum 3 doors
+                                    gameController.setDoorCount(count);
+                                }
+                            } catch (NumberFormatException e) {
+                                // Invalid door count, ignore
+                            }
+                        }
+                        break;
+                }
             }
-            
-            GameLogic switchGame = new GameLogic();
-            switchGame.makeInitialChoice(0); // Always choose door 0
-            switchGame.switchDoor();
-            if (switchGame.hasWon()) {
-                switchWins++;
+
+            // Generate HTML for the current game state
+            String responseHTML = HtmlGenerator.generateGamePage(gameController);
+
+            // Send the response
+            exchange.sendResponseHeaders(200, responseHTML.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(responseHTML.getBytes());
+            os.close();
+        }
+
+        private Map<String, String> parseQueryParams(String query) {
+            Map<String, String> params = new HashMap<>();
+            if (query == null || query.isEmpty()) {
+                return params;
             }
+
+            String[] pairs = query.split("&");
+            for (String pair : pairs) {
+                String[] keyValue = pair.split("=");
+                if (keyValue.length == 2) {
+                    params.put(keyValue[0], keyValue[1]);
+                }
+            }
+
+            return params;
+        }
+    }
+
+    static class StaticFileHandler implements HttpHandler {
+        private final String baseDir;
+        
+        public StaticFileHandler(String baseDir) {
+            this.baseDir = baseDir;
         }
         
-        System.out.println("Simulation Results:");
-        System.out.println("Stay strategy wins: " + stayWins + " (" + (stayWins * 100.0 / totalGames) + "%)");
-        System.out.println("Switch strategy wins: " + switchWins + " (" + (switchWins * 100.0 / totalGames) + "%)");
+        @Override
+        public void handle(HttpExchange exchange) throws IOException {
+            String path = exchange.getRequestURI().getPath();
+            Path filePath = Paths.get(baseDir, path.substring(path.lastIndexOf("/") + 1));
+            
+            if (Files.exists(filePath)) {
+                exchange.sendResponseHeaders(200, Files.size(filePath));
+                try (OutputStream os = exchange.getResponseBody();
+                     InputStream is = Files.newInputStream(filePath)) {
+                    is.transferTo(os);
+                }
+            } else {
+                String response = "404 (Not Found)\n";
+                exchange.sendResponseHeaders(404, response.length());
+                try (OutputStream os = exchange.getResponseBody()) {
+                    os.write(response.getBytes());
+                }
+            }
+        }
     }
 }
