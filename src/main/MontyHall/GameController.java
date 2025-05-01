@@ -66,30 +66,31 @@ public class GameController {
         Random random = new Random();
         
         for (int i = 0; i < iterations; i++) {
-            // Create two separate games to test both strategies
-            GameLogic stayGame = new GameLogic(game.getDoorCount());
-            GameLogic switchGame = new GameLogic(game.getDoorCount());
+            // Create a single game instance for each iteration
+            GameLogic game = new GameLogic(this.game.getDoorCount());
             
-            // Make random initial choices for both games
+            // Make random initial choice
             int initialChoice = random.nextInt(game.getDoorCount());
-            stayGame.makeInitialChoice(initialChoice);
-            switchGame.makeInitialChoice(initialChoice);
+            game.makeInitialChoice(initialChoice);
             
-            // Apply stay strategy
-            stayGame.stayWithCurrentChoice();
-            stayGames++;
-            if (stayGame.hasWon()) {
-                stayWins++;
+            // Randomly decide whether to stay or switch
+            boolean shouldSwitch = random.nextBoolean();
+            
+            if (shouldSwitch) {
+                game.switchDoor();
+                switchGames++;
+                if (game.hasWon()) {
+                    switchWins++;
+                }
+            } else {
+                game.stayWithCurrentChoice();
+                stayGames++;
+                if (game.hasWon()) {
+                    stayWins++;
+                }
             }
             
-            // Apply switch strategy
-            switchGame.switchDoor();
-            switchGames++;
-            if (switchGame.hasWon()) {
-                switchWins++;
-            }
-            
-            gamesPlayed += 2;
+            gamesPlayed++;
         }
         
         // Reset the current game so player can start fresh
