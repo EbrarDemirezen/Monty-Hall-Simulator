@@ -40,6 +40,7 @@ This project is primarily built with Java for core game logic and will be extend
 * **HTML/CSS/JavaScript** – Frontend UI and interactive elements (to be decided)
 * **GitHub** – Project planning, collaboration, and issue tracking
 * **Libraries, frameworks** - (to be decided)
+* **AI Image Generators** - Some visual assets, including UI illustrations and icons, were generated using AI tools (Leonardo.Ai / Adobe Firefly)
 
 ## 🚀 Installation & Usage
 
