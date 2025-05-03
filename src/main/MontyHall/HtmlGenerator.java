@@ -17,12 +17,70 @@ public class HtmlGenerator {
         html.append("    <meta charset=\"UTF-8\">\n");
         html.append("    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0\">\n");
         html.append("    <title>Monty Hall Simulator</title>\n");
+        html.append("    <link href=\"https://fonts.googleapis.com/css2?family=Bungee&family=Press+Start+2P&family=Open+Sans:wght@400;600&display=swap\" rel=\"stylesheet\">\n");
         html.append("    <style>\n");
-        html.append(
-                "        body { font-family: Arial, sans-serif; text-align: center; margin: 0; padding: 20px; background-color: #f5f5f5; }\n");
-        html.append("        h1 { color: #2c3e50; margin-bottom: 10px; }\n");
-        html.append("        .subtitle { color: #7f8c8d; margin-top: 0; }\n");
-        html.append("        .game-container { margin: 30px auto; max-width: 1000px; background-color: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }\n");
+        html.append("        @keyframes spotlight {\n");
+        html.append("            0%, 100% { background-position: 0% 0%; }\n");
+        html.append("            50% { background-position: 100% 100%; }\n");
+        html.append("        }\n");
+        html.append("        body {\n");
+        html.append("            font-family: 'Open Sans', sans-serif;\n");
+        html.append("            text-align: center;\n");
+        html.append("            margin: 0;\n");
+        html.append("            padding: 20px;\n");
+        html.append("            background: url('/images/curtain_bg.jpg') no-repeat center center fixed;\n");
+        html.append("            background-size: cover;\n");
+        html.append("            min-height: 100vh;\n");
+        html.append("            position: relative;\n");
+        html.append("        }\n");
+        html.append("        body::before {\n");
+        html.append("            content: '';\n");
+        html.append("            position: fixed;\n");
+        html.append("            top: 0;\n");
+        html.append("            left: 0;\n");
+        html.append("            width: 100%;\n");
+        html.append("            height: 100%;\n");
+        html.append("            background: rgba(0, 0, 0, 0.5);\n");
+        html.append("            z-index: 1;\n");
+        html.append("        }\n");
+        html.append("        .game-container {\n");
+        html.append("            position: relative;\n");
+        html.append("            z-index: 2;\n");
+        html.append("            margin: 30px auto;\n");
+        html.append("            max-width: 1000px;\n");
+        html.append("            background: rgba(0, 0, 0, 0.7);\n");
+        html.append("            padding: 30px;\n");
+        html.append("            border-radius: 20px;\n");
+        html.append("            box-shadow: 0 0 50px rgba(255,215,0,0.2);\n");
+        html.append("            border: 3px solid #FFD700;\n");
+        html.append("            backdrop-filter: blur(5px);\n");
+        html.append("        }\n");
+        html.append("        h1 {\n");
+        html.append("            position: relative;\n");
+        html.append("            z-index: 2;\n");
+        html.append("            font-family: 'Bungee', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-size: 3.5em;\n");
+        html.append("            text-shadow: 0 0 10px rgba(0,0,0,0.8),\n");
+        html.append("                         0 0 20px rgba(255,215,0,0.5),\n");
+        html.append("                         0 0 30px rgba(255,215,0,0.3);\n");
+        html.append("            margin-bottom: 10px;\n");
+        html.append("            animation: glow 2s ease-in-out infinite alternate;\n");
+        html.append("        }\n");
+
+        html.append("        @keyframes glow {\n");
+        html.append("            from { text-shadow: 0 0 10px rgba(255,215,0,0.5), 0 0 20px rgba(255,215,0,0.3); }\n");
+        html.append("            to { text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 30px rgba(255,215,0,0.6); }\n");
+        html.append("        }\n");
+
+        html.append("        .subtitle {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            color:rgb(42, 76, 230);\n");
+        html.append("            font-size: 1em;\n");
+        html.append("            margin-top: 0;\n");
+        html.append("            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
         html.append("        .doors-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; }\n");
         //!       
         html.append("        .door { width: 170px; height: 260px; background-size: contain; background-repeat: no-repeat; background-position: center; cursor: pointer; position: relative; transition: all 0.3s ease; margin: 10px; }\n");
@@ -39,7 +97,7 @@ public class HtmlGenerator {
         html.append("        .door.door-2 { background-image: url('" + DOOR_2_IMAGE + "'); }\n");
         html.append("        .door.door-3 { background-image: url('" + DOOR_3_IMAGE + "'); }\n");
         html.append("        .door.selected { border-color: #f1c40f; box-shadow: 0 0 15px #f1c40f; }\n");
-        html.append("        .door.revealed { transform: perspective(1200px) rotateY(30deg); }\n");
+        html.append("        .door.revealed { transform: perspective(700px) rotateY(55deg); }\n");
         html.append("        .door.revealed .door-content { display: block; animation: popIn 0.5s ease; }\n");
         html.append("        .door.opened { transform: perspective(1200px) rotateY(30deg); }\n");
         // html.append(" .door-number { position: absolute; top: 50%; left: 50%;
@@ -52,14 +110,26 @@ public class HtmlGenerator {
         html.append(
                 "        @keyframes popIn { 0% { transform: translate(-50%, -50%) scale(0); } 100% { transform: translate(-50%, -50%) scale(1); } }\n");
         html.append("        .controls { margin: 20px 0; }\n");
-        html.append(
-                "        button { padding: 10px 20px; margin: 5px; font-size: 16px; cursor: pointer; background-color: #3498db; color: white; border: none; border-radius: 5px; transition: background-color 0.2s; }\n");
-        html.append("        button:hover { background-color:rgb(185, 41, 87); }\n");
-        html.append("        button:disabled { background-color: #95a5a6; cursor: not-allowed; }\n");
+        html.append("        button { padding: 12px 25px; margin: 8px; font-size: 16px; font-family: 'Press Start 2P', cursive; cursor: pointer; background: linear-gradient(45deg, #FFD700, #FFA500); color: #000; border: none; border-radius: 8px; box-shadow: 0 4px 15px rgba(255,215,0,0.3); transition: all 0.3s ease; text-transform: uppercase; }\n");
+        html.append("        button:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(255,215,0,0.4); background: linear-gradient(45deg, #FFA500, #FFD700); }\n");
+        html.append("        button:disabled { background: #95a5a6; cursor: not-allowed; transform: none; box-shadow: none; }\n");
         
         //!
         html.append(
-                "        .status { font-size: 20px; margin: 10px auto 20px; padding: 15px; background-color: #fff3cd; border-left: 4px solid #ffc107; border-radius: 5px; max-width: 600px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); transition: all 0.3s ease; }\n");
+                "        .status { \n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n"); 
+        html.append("            font-size: 18px;\n");
+        html.append("            line-height: 1.8;\n");  // Added this line for increased spacing
+        html.append("            margin: 20px auto;\n");
+        html.append("            padding: 20px;\n");
+        html.append("            background: rgba(255,215,0,0.1);\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            border-radius: 10px;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            max-width: 800px;\n");
+        html.append("            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\n");
+        html.append("            box-shadow: 0 0 20px rgba(255,215,0,0.2);\n");
+        html.append("        }\n");
         html.append(
                 "        .status:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }\n");
         
@@ -77,21 +147,258 @@ public class HtmlGenerator {
         html.append("        .tab-buttons { display: flex; justify-content: center; }\n");
         html.append("        .tab-button { padding: 10px 20px; border: none; background-color: #ddd; cursor: pointer; }\n");
         html.append("        .tab-button.active { background-color: #3498db; color: white; }\n");
-        html.append("        .tab-content { display: none; padding: 20px; background-color: #f1f1f1; }\n");
-        html.append("        .tab-content.active { display: block; }\n");
+        html.append("        .tab-content { \n");
+        html.append("            display: none; \n");
+        html.append("            padding: 20px; \n");
+        html.append("            background: transparent; \n"); // Changed from background-color: #f1f1f1
+        html.append("        }\n");
+        html.append("        .tab-content.active { \n");
+        html.append("            display: block; \n");
+        html.append("        }\n");
         html.append("        .options { margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px; text-align: left; }\n");
         html.append("        .options label { margin-right: 10px; }\n");
         html.append("        .auto-play { margin-top: 20px; padding: 15px; background-color: #e8f8f8; border-radius: 5px; }\n");
         
         //!----------------------------------------------------------------------------------------------------------------------------------
-        html.append("        .bar-chart { margin: 20px auto; max-width: 600px; }\n");
-        html.append("        .bar { height: 40px; margin: 15px 0; position: relative; background-color:rgb(242, 116, 116); border-radius: 4px; overflow: hidden; }\n");
-        html.append("        .wins-fill { height: 100%; background-color:rgb(255, 215, 0); transition: width 1s ease-in-out; }\n");
-        html.append("        .bar-label { position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: #000; font-weight: bold; }\n");
-        html.append("        .wins-value { position: absolute; right: 10px; top: 25%; transform: translateY(-50%); color: #196F3D; }\n");
-        html.append("        .losses-value { position: absolute; right: 10px; bottom: 25%; transform: translateY(50%); color: #922B21; }\n");
+        html.append("        .bar-chart { margin: 30px auto; max-width: 800px; }\n");
+        html.append("        .strategy-group { margin-bottom: 25px; }\n");
+        html.append("        .strategy-label { text-align: left; font-weight: bold; margin-bottom: 5px; }\n");
+        html.append("        .bar-container { height: 35px; display: flex; background-color: #f0f0f0; border-radius: 4px; overflow: hidden; }\n");
+        html.append("        .bar-wins { height: 100%; background-color: #2ecc71; transition: width 0.8s ease-in-out; display: flex; align-items: center; justify-content: center; }\n");
+        html.append("        .bar-losses { height: 100%; background-color: #e74c3c; transition: width 0.8s ease-in-out; display: flex; align-items: center; justify-content: center; }\n");
+        html.append("        .bar-text { color: white; font-weight: bold; padding: 0 10px; text-shadow: 1px 1px 1px rgba(0,0,0,0.3); }\n");
         //!----------------------------------------------------------------------------------------------------------------------------------
+        html.append("        .bar-chart { \n");
+        html.append("            margin: 40px auto;\n");
+        html.append("            max-width: 800px;\n");
+        html.append("            background: linear-gradient(145deg, #2c3e50, #1a1a1a);\n");
+        html.append("            padding: 25px;\n");
+        html.append("            border-radius: 15px;\n");
+        html.append("            box-shadow: 0 0 30px rgba(255, 215, 0, 0.2);\n");
+        html.append("            border: 3px solid #FFD700;\n");
+        html.append("        }\n");
+
+        html.append("        .bar-chart h4 {\n");
+        html.append("            font-family: 'Bungee', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\n");
+        html.append("            margin-bottom: 25px;\n");
+        html.append("            font-size: 24px;\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-group {\n");
+        html.append("            margin-bottom: 30px;\n");
+        html.append("            position: relative;\n");
+        html.append("            overflow: hidden;\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-label {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            margin-bottom: 10px;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);\n");
+        html.append("        }\n");
+
+        html.append("        .bar-container {\n");
+        html.append("            height: 40px;\n");
+        html.append("            display: flex;\n");
+        html.append("            background: rgba(0,0,0,0.3);\n");
+        html.append("            border-radius: 8px;\n");
+        html.append("            overflow: hidden;\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            box-shadow: 0 0 15px rgba(255,215,0,0.3);\n");
+        html.append("        }\n");
+
+        html.append("        .bar-wins {\n");
+        html.append("            height: 100%;\n");
+        html.append("            background: linear-gradient(90deg, #4169E1, #1e90ff);\n");
+        html.append("            transition: width 0.8s ease-in-out;\n");
+        html.append("            display: flex;\n");
+        html.append("            align-items: center;\n");
+        html.append("            justify-content: center;\n");
+        html.append("            position: relative;\n");
+        html.append("            overflow: hidden;\n");
+        html.append("        }\n");
+
+        html.append("        .bar-losses {\n");
+        html.append("            height: 100%;\n");
+        html.append("            background: linear-gradient(90deg, #B22222, #8B0000);\n");
+        html.append("            transition: width 0.8s ease-in-out;\n");
+        html.append("            display: flex;\n");
+        html.append("            align-items: center;\n");
+        html.append("            justify-content: center;\n");
+        html.append("            position: relative;\n");
+        html.append("        }\n");
+
+        html.append("        .bar-text {\n");
+        html.append("            color: white;\n");
+        html.append("            font-family: 'Open Sans', sans-serif;\n");
+        html.append("            font-weight: 600;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            padding: 0 15px;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);\n");
+        html.append("            z-index: 2;\n");
+        html.append("        }\n");
+
+        // Add shimmer effect
+        html.append("        @keyframes shimmer {\n");
+        html.append("            0% { background-position: -100% 0; }\n");
+        html.append("            100% { background-position: 100% 0; }\n");
+        html.append("        }\n");
+
+        html.append("        .bar-container::after {\n");
+        html.append("            content: '';\n");
+        html.append("            position: absolute;\n");
+        html.append("            top: 0;\n");
+        html.append("            left: 0;\n");
+        html.append("            width: 100%;\n");
+        html.append("            height: 100%;\n");
+        html.append("            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.2), transparent);\n");
+        html.append("            animation: shimmer 4s infinite;\n");  // Changed from 2s to 4s
+        html.append("        }\n");
+
+        // Add these CSS rules after the existing styles
+        html.append("        .statistics-panel {\n");
+        html.append("            background: linear-gradient(145deg, \n");
+        html.append("                rgba(44, 62, 80, 0.95), \n");
+        html.append("                rgba(52, 73, 94, 0.95),\n");
+        html.append("                rgba(44, 62, 80, 0.95)\n");
+        html.append("            );\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            border-radius: 15px;\n");
+        html.append("            padding: 25px;\n");
+        html.append("            margin: 20px auto;\n");
+        html.append("            box-shadow: 0 0 30px rgba(255,215,0,0.15),\n");
+        html.append("                        inset 0 0 50px rgba(255,215,0,0.05);\n");
+        html.append("            backdrop-filter: blur(5px);\n");
+        html.append("            position: relative;\n");
+        html.append("            overflow: hidden;\n");
+        html.append("        }\n");
+
+        // Add a subtle animated gradient overlay
         
+
+        // Add the animation keyframes
+        html.append("        @keyframes panelShimmer {\n");
+        html.append("            0% { transform: translateX(-100%); }\n");
+        html.append("            100% { transform: translateX(100%); }\n");
+        html.append("        }\n");
+
+        html.append("        .stats-header {\n");
+        html.append("            font-family: 'Bungee', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-size: 28px;\n");
+        html.append("            text-shadow: 0 0 10px rgba(255,215,0,0.5);\n");
+        html.append("            margin-bottom: 5px;\n");
+        html.append("            animation: glow 2s ease-in-out infinite alternate;\n");
+        html.append("        }\n");
+
+        html.append("        .stats-subtitle {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            color: #4FC3F7;\n");
+        html.append("            font-size: 12px;\n");
+        html.append("            margin-bottom: 25px;\n");
+        html.append("        }\n");
+
+        html.append("        .games-played {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-size: 16px;\n");
+        html.append("            padding: 15px;\n");
+        html.append("            background: rgba(255,215,0,0.1);\n");
+        html.append("            border-radius: 8px;\n");
+        html.append("            margin-bottom: 20px;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-cards {\n");
+        html.append("            display: grid;\n");
+        html.append("            grid-template-columns: 1fr 1fr;\n");
+        html.append("            gap: 20px;\n");
+        html.append("            margin-top: 20px;\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-card {\n");
+        html.append("            background: linear-gradient(145deg, #1a1a1a, #2c3e50);\n");
+        html.append("            border: 1px solid rgba(255,215,0,0.3);\n");
+        html.append("            border-radius: 12px;\n");
+        html.append("            padding: 20px;\n");
+        html.append("            transition: transform 0.3s ease;\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-card:hover {\n");
+        html.append("            transform: translateY(-5px);\n");
+        html.append("        }\n");
+
+        html.append("        .strategy-title {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            margin-bottom: 15px;\n");
+        html.append("            display: flex;\n");
+        html.append("            align-items: center;\n");
+        html.append("            gap: 10px;\n");
+        html.append("        }\n");
+
+        html.append("        .win-rate {\n");
+        html.append("            font-size: 24px;\n");
+        html.append("            font-weight: bold;\n");
+        html.append("            color: #2ecc71;\n");
+        html.append("            margin: 10px 0;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .stats-value {\n");
+        html.append("            font-family: 'Open Sans', sans-serif;\n");
+        html.append("            font-size: 16px;\n");
+        html.append("            color: #fff;\n");
+        html.append("            margin: 5px 0;\n");
+        html.append("        }\n");
+
+        // Add these CSS rules to the existing styles section
+        html.append("        .stats-divider {\n");
+        html.append("            height: 2px;\n");
+        html.append("            background: linear-gradient(90deg, transparent, rgba(255,215,0,0.3), transparent);\n");
+        html.append("            margin: 30px 0;\n");
+        html.append("        }\n");
+
+        html.append("        .performance-section {\n");
+        html.append("            padding-top: 10px;\n");
+        html.append("        }\n");
+
+        html.append("        .performance-section .stats-header {\n");
+        html.append("            font-size: 24px;\n");
+        html.append("            margin-bottom: 25px;\n");
+        html.append("        }\n");
+
+        html.append("        .auto-play-section {\n");
+        html.append("            padding-top: 10px;\n");
+        html.append("        }\n");
+
+        html.append("        .auto-play-buttons {\n");
+        html.append("            display: flex;\n");
+        html.append("            gap: 15px;\n");
+        html.append("            justify-content: center;\n");
+        html.append("            margin-top: 20px;\n");
+        html.append("        }\n");
+
+        html.append("        .auto-play-buttons button {\n");
+        html.append("            background: linear-gradient(145deg, #1a1a1a, #2c3e50);\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            padding: 12px 20px;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            font-size: 12px;\n");
+        html.append("            transition: all 0.3s ease;\n");
+        html.append("        }\n");
+
+        html.append("        .auto-play-buttons button:hover {\n");
+        html.append("            transform: translateY(-2px);\n");
+        html.append("            box-shadow: 0 0 15px rgba(255,215,0,0.3);\n");
+        html.append("            background: linear-gradient(145deg, #2c3e50, #1a1a1a);\n");
+        html.append("        }\n");
+
         html.append("    </style>\n");
         html.append("    <script>\n");
         html.append("        function toggleTab(tabId) {\n");
@@ -117,7 +424,7 @@ public class HtmlGenerator {
         html.append("</head>\n");
         html.append("<body>\n");
         html.append("    <h1>🐐 Monty Hall Simulator 🐐</h1>\n");
-        html.append("    <p class=\"subtitle\">Test your probability intuition with the famous paradox</p>\n");
+        html.append("    <p class=\"subtitle\">Put your luck and logic to the test!</p>\n");
         html.append("    <div class=\"game-container\">\n");
 
         // Game status message
@@ -215,49 +522,75 @@ public class HtmlGenerator {
 
         //? Statistics tab
         html.append("            <div id=\"tab-stats\" class=\"tab-content active\">\n");
-        html.append("                <h3>Game Statistics</h3>\n");
-        html.append("                <p>Games played: ").append(controller.getGamesPlayed()).append("</p>\n");
-        html.append("                <div class=\"stat-grid\">\n");
-        html.append("                    <div class=\"stat-box stay-stats\">\n");
-        html.append("                        <h4>Stay Strategy</h4>\n");
-        html.append("                        <p>Wins: ").append(controller.getStayWins()).append("</p>\n");
-        html.append("                        <p>Win rate: ").append(String.format("%.1f", controller.getStayWinRate()))
-                .append("%</p>\n");
+        html.append("                <div class=\"statistics-panel\">\n");
+        // Game Statistics Section
+        html.append("                    <div class=\"stats-header\">Game Statistics</div>\n");
+        html.append("                    <div class=\"stats-subtitle\">Track Your Success Rate Over Time</div>\n");
+        html.append("                    <div class=\"games-played\">🎮 Games Played: " + controller.getGamesPlayed() + "</div>\n");
+        html.append("                    <div class=\"strategy-cards\">\n");
+        html.append("                        <div class=\"strategy-card\">\n");
+        html.append("                            <div class=\"strategy-title\">🚪 Stay Strategy</div>\n");
+        html.append("                            <div class=\"win-rate\">" + String.format("%.1f", controller.getStayWinRate()) + "% ✨</div>\n");
+        html.append("                            <div class=\"stats-value\">Wins: " + controller.getStayWins() + "</div>\n");
+        html.append("                            <div class=\"stats-value\">Total Games: " + controller.getStayGames() + "</div>\n");
+        html.append("                        </div>\n");
+        html.append("                        <div class=\"strategy-card\">\n");
+        html.append("                            <div class=\"strategy-title\">🔄 Switch Strategy</div>\n");
+        html.append("                            <div class=\"win-rate\">" + String.format("%.1f", controller.getSwitchWinRate()) + "% ✨</div>\n");
+        html.append("                            <div class=\"stats-value\">Wins: " + controller.getSwitchWins() + "</div>\n");
+        html.append("                            <div class=\"stats-value\">Total Games: " + controller.getSwitchGames() + "</div>\n");
+        html.append("                        </div>\n");
         html.append("                    </div>\n");
-        html.append("                    <div class=\"stat-box switch-stats\">\n");
-        html.append("                        <h4>Switch Strategy</h4>\n");
-        html.append("                        <p>Wins: ").append(controller.getSwitchWins()).append("</p>\n");
-        html.append("                        <p>Win rate: ")
-                .append(String.format("%.1f", controller.getSwitchWinRate())).append("%</p>\n");
-        html.append("                    </div>\n");
-        html.append("                </div>\n");
-        //!-----------------------------------------------------------------------------------------------------------------------------------
-        html.append("                <div class=\"bar-chart\">\n");
-        html.append("                    <h4>Strategy Performance</h4>\n");
-        html.append("                    <div class=\"bar\">\n");
-        html.append("                        <div class=\"wins-fill\" style=\"width: ").append(controller.getStayWinRate()).append("%;\"></div>\n");
-        html.append("                        <span class=\"bar-label\">Stay Strategy 🔒</span>\n");
-        html.append("                        <span class=\"wins-value\">Wins: ").append(controller.getStayWins()).append("</span>\n");
-        html.append("                        <span class=\"losses-value\">Losses: ").append(controller.getStayGames() - controller.getStayWins()).append("</span>\n");
-        html.append("                    </div>\n");
-        html.append("                    <div class=\"bar\">\n");
-        html.append("                        <div class=\"wins-fill\" style=\"width: ").append(controller.getSwitchWinRate()).append("%;\"></div>\n");
-        html.append("                        <span class=\"bar-label\">Switch Strategy 🔄</span>\n");
-        html.append("                        <span class=\"wins-value\">Wins: ").append(controller.getSwitchWins()).append("</span>\n");
-        html.append("                        <span class=\"losses-value\">Losses: ").append(controller.getSwitchGames() - controller.getSwitchWins()).append("</span>\n");
-        html.append("                    </div>\n");
-        html.append("                </div>\n");
-       //!-----------------------------------------------------------------------------------------------------------------------------------
 
-        // Auto-play section
-        html.append("                <div class=\"auto-play\">\n");
-        html.append("                    <h4>Auto-Play Simulation</h4>\n");
-        html.append(
-                "                    <p>Run multiple games automatically to see the probabilities in action:</p>\n");
-        html.append("                    <button onclick=\"autoPlay(10)\">Run 10 Games</button>\n");
-        html.append("                    <button onclick=\"autoPlay(100)\">Run 100 Games</button>\n");
-        html.append("                    <button onclick=\"autoPlay(1000)\">Run 1000 Games</button>\n");
-        html.append("                </div>\n");
+        // Divider
+        html.append("                    <div class=\"stats-divider\"></div>\n");
+
+        // Performance per Strategy Section
+        html.append("                    <div class=\"performance-section\">\n");
+        html.append("                        <div class=\"stats-header\">Performance per Strategy</div>\n");
+        html.append("                        <div class=\"strategy-group\">\n");
+        html.append("                            <div class=\"strategy-label\">Stay Strategy 🔒</div>\n");
+        html.append("                            <div class=\"bar-container\">\n");
+        double stayWinWidth = controller.getStayWinRate();
+        double stayLossWidth = 100 - stayWinWidth;
+        html.append("                                <div class=\"bar-wins\" style=\"width: " + stayWinWidth + "%;\">\n");
+        html.append("                                    <span class=\"bar-text\">" + controller.getStayWins() + " Wins (" + String.format("%.1f", stayWinWidth) + "%)</span>\n");
+        html.append("                                </div>\n");
+        html.append("                                <div class=\"bar-losses\" style=\"width: " + stayLossWidth + "%;\">\n");
+        html.append("                                    <span class=\"bar-text\">" + (controller.getStayGames() - controller.getStayWins()) + " Losses (" + String.format("%.1f", stayLossWidth) + "%)</span>\n");
+        html.append("                                </div>\n");
+        html.append("                            </div>\n");
+        html.append("                        </div>\n");
+        html.append("                        <div class=\"strategy-group\">\n");
+        html.append("                            <div class=\"strategy-label\">Switch Strategy 🔄</div>\n");
+        html.append("                            <div class=\"bar-container\">\n");
+        double switchWinWidth = controller.getSwitchWinRate();
+        double switchLossWidth = 100 - switchWinWidth;
+        html.append("                                <div class=\"bar-wins\" style=\"width: " + switchWinWidth + "%;\">\n");
+        html.append("                                    <span class=\"bar-text\">" + controller.getSwitchWins() + " Wins (" + String.format("%.1f", switchWinWidth) + "%)</span>\n");
+        html.append("                                </div>\n");
+        html.append("                                <div class=\"bar-losses\" style=\"width: " + switchLossWidth + "%;\">\n");
+        html.append("                                    <span class=\"bar-text\">" + (controller.getSwitchGames() - controller.getSwitchWins()) + " Losses (" + String.format("%.1f", switchLossWidth) + "%)</span>\n");
+        html.append("                                </div>\n");
+        html.append("                            </div>\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+
+        // Divider
+        html.append("                    <div class=\"stats-divider\"></div>\n");
+
+        // Add Auto-Play section
+        html.append("                    <div class=\"auto-play-section\">\n");
+        html.append("                        <div class=\"stats-header\">Auto-Play Simulation</div>\n");
+        html.append("                        <div class=\"stats-subtitle\">Run Multiple Games Automatically</div>\n");
+        html.append("                        <div class=\"auto-play-buttons\">\n");
+        html.append("                            <button onclick=\"autoPlay(10)\">Run 10 Games</button>\n");
+        html.append("                            <button onclick=\"autoPlay(100)\">Run 100 Games</button>\n");
+        html.append("                            <button onclick=\"autoPlay(1000)\">Run 1000 Games</button>\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+        html.append("                </div>\n"); // End of statistics-panel
+
         html.append("            </div>\n");
 
         // Options tab
@@ -293,9 +626,9 @@ public class HtmlGenerator {
                 "                    <p>Intuitively, many people think it doesn't matter whether you switch or not, assuming the probability is 50/50. However, mathematical analysis shows that:</p>\n");
         html.append("                    <ul>\n");
         html.append(
-                "                        <li>If you <strong>stay</strong> with your initial choice, your probability of winning is 1/3 (about 33%).</li>\n");
+                "                        <li>If you <strong>stay</strong> with your initial choice, your probability of winning is 1/3 (about 33.3%).</li>\n");
         html.append(
-                "                        <li>If you <strong>switch</strong> to the other door, your probability of winning is 2/3 (about 67%).</li>\n");
+                "                        <li>If you <strong>switch</strong> to the other door, your probability of winning is 2/3 (about 66.6%).</li>\n");
         html.append("                    </ul>\n");
         html.append("                    <h4>Why Switching is Better:</h4>\n");
         html.append("                    <p>Think of it this way:</p>\n");
