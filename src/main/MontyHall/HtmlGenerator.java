@@ -437,6 +437,72 @@ public class HtmlGenerator {
         html.append("            background: linear-gradient(145deg, #2c3e50, #1a1a1a);\n");
         html.append("        }\n");
 
+        html.append("        .explanation-panel {\n");
+        html.append("            background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(20,20,20,0.9));\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            border-radius: 15px;\n");
+        html.append("            padding: 25px;\n");
+        html.append("            margin: 20px auto;\n");
+        html.append("            max-width: 800px;\n");
+        html.append("            position: relative;\n");
+        html.append("            box-shadow: 0 0 30px rgba(255,215,0,0.15);\n");
+        html.append("        }\n");
+
+        html.append("        .explanation-title {\n");
+        html.append("            font-family: 'Bungee', cursive;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-size: 28px;\n");
+        html.append("            margin-bottom: 20px;\n");
+        html.append("            text-shadow: 0 0 10px rgba(255,215,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .explanation-text {\n");
+        html.append("            font-family: 'Open Sans', sans-serif;\n");
+        html.append("            color: #fff;\n");
+        html.append("            font-size: 16px;\n");
+        html.append("            line-height: 1.8;\n");
+        html.append("            margin-bottom: 15px;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .highlight {\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            font-weight: bold;\n");
+        html.append("        }\n");
+
+        html.append("        .explanation-section {\n");
+        html.append("            margin-bottom: 30px;\n");
+        html.append("        }\n");
+
+        html.append("        .explanation-subtitle {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            color: #4FC3F7;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            margin: 20px 0;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .probability-box {\n");
+        html.append("            background: linear-gradient(145deg, #1a1a1a, #2c3e50);\n");
+        html.append("            border: 2px solid rgba(255,215,0,0.5);\n");
+        html.append("            border-radius: 12px;\n");
+        html.append("            padding: 20px;\n");
+        html.append("            margin: 20px 0;\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            line-height: 2;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);\n");
+        html.append("            box-shadow: 0 0 20px rgba(255,215,0,0.1);\n");
+        html.append("        }\n");
+
+        html.append("        .probability-box .highlight {\n");
+        html.append("            color: #4FC3F7;\n");
+        html.append("            font-weight: bold;\n");
+        html.append("            font-size: 16px;\n");
+        html.append("            text-shadow: 0 0 10px rgba(79,195,247,0.5);\n");
+        html.append("        }\n");
+
         html.append("    </style>\n");
         html.append("    <script>\n");
         html.append("        function toggleTab(tabId) {\n");
@@ -644,45 +710,64 @@ public class HtmlGenerator {
 
         // Explanation tab
         html.append("            <div id=\"tab-explanation\" class=\"tab-content\">\n");
-        html.append("                <div class=\"explanation\">\n");
-        html.append("                    <h3>The Monty Hall Problem Explained</h3>\n");
-        html.append(
-                "                    <p>The Monty Hall problem is a famous probability puzzle named after the host of the game show \"Let's Make a Deal.\"</p>\n");
-        html.append("                    <h4>The Scenario:</h4>\n");
-        html.append("                    <ol>\n");
-        html.append(
-                "                        <li>There are three doors. Behind one door is a car (the prize), and behind the other two are goats.</li>\n");
-        html.append("                        <li>You pick a door, say door 1.</li>\n");
-        html.append(
-                "                        <li>The host, who knows what's behind each door, opens one of the other doors, say door 3, to reveal a goat.</li>\n");
-        html.append(
-                "                        <li>The host then asks if you want to switch your choice to the remaining door (door 2) or stick with your original choice (door 1).</li>\n");
-        html.append("                    </ol>\n");
-        html.append("                    <h4>The Paradox:</h4>\n");
-        html.append(
-                "                    <p>Intuitively, many people think it doesn't matter whether you switch or not, assuming the probability is 50/50. However, mathematical analysis shows that:</p>\n");
-        html.append("                    <ul>\n");
-        html.append(
-                "                        <li>If you <strong>stay</strong> with your initial choice, your probability of winning is 1/3 (about 33.3%).</li>\n");
-        html.append(
-                "                        <li>If you <strong>switch</strong> to the other door, your probability of winning is 2/3 (about 66.6%).</li>\n");
-        html.append("                    </ul>\n");
-        html.append("                    <h4>Why Switching is Better:</h4>\n");
-        html.append("                    <p>Think of it this way:</p>\n");
-        html.append("                    <ul>\n");
-        html.append(
-                "                        <li>When you make your initial choice, there's a 1/3 chance you picked the car and a 2/3 chance you picked a goat.</li>\n");
-        html.append(
-                "                        <li>If you initially picked a goat (2/3 chance), then switching will ALWAYS lead you to the car.</li>\n");
-        html.append(
-                "                        <li>If you initially picked the car (1/3 chance), then switching will lead you to a goat.</li>\n");
-        html.append("                    </ul>\n");
-        html.append(
-                "                    <p>So by switching, you win whenever your initial choice was a goat, which happens 2/3 of the time!</p>\n");
-        html.append(
-                "                    <p>Play the game multiple times to see the probabilities in action, or use the auto-play feature to run many simulations.</p>\n");
+        html.append("                <div class=\"explanation-panel\">\n");
+        html.append("                    <div class=\"explanation-title\">🎮 The Monty Hall Problem Explained</div>\n");
+        html.append("                    <div class=\"explanation-text\">\n");
+        html.append("                        The Monty Hall problem is a famous probability puzzle named after the host of the game show \"Let's Make a Deal.\"\n");
+        html.append("                    </div>\n");
+
+        html.append("                    <div class=\"explanation-section\">\n");
+        html.append("                        <div class=\"explanation-subtitle\">The Scenario:</div>\n");
+        html.append("                        <div class=\"explanation-text\">\n");
+        html.append("                            • There are <span class=\"highlight\">three doors</span>. Behind one door is a <span class=\"highlight\">car</span> (the prize), and behind the other two are <span class=\"highlight\">goats</span>.<br>\n");
+        html.append("                            • You pick a door, say door 1.<br>\n");
+        html.append("                            • The host, who knows what's behind each door, opens one of the other doors, say door 3, to reveal a goat.<br>\n");
+        html.append("                            • The host then asks if you want to switch your choice to the remaining door (door 2) or stick with your original choice (door 1).\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+
+        html.append("                    <div class=\"explanation-section\">\n");
+        html.append("                        <div class=\"explanation-subtitle\">The Paradox:</div>\n");
+        html.append("                        <div class=\"explanation-text\">\n");
+        html.append("                            Intuitively, many people think it doesn't matter whether you switch or not, assuming the probability is 50/50. However, mathematical analysis shows that:\n");
+        html.append("                        </div>\n");
+        html.append("                        <div class=\"probability-box\">\n");
+        html.append("                            • If you <span class=\"highlight\">STAY</span> with your initial choice:<br>\n");
+        html.append("                              Win Rate: <span class=\"highlight\">1/3 (33.3%)</span><br>\n");
+        html.append("                            • If you <span class=\"highlight\">SWITCH</span> to the other door:<br>\n");
+        html.append("                              Win Rate: <span class=\"highlight\">2/3 (66.6%)</span>\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+
+        html.append("                    <div class=\"explanation-section\">\n");
+        html.append("                        <div class=\"explanation-subtitle\">Why Switching is Better:</div>\n");
+        html.append("                        <div class=\"explanation-text\">\n");
+        html.append("                            Think of it this way:<br><br>\n");
+        html.append("                            • When you make your initial choice, there's a 1/3 chance you picked the car and a 2/3 chance you picked a goat.<br>\n");
+        html.append("                            • If you initially picked a goat (2/3 chance), then switching will ALWAYS lead you to the car.<br>\n");
+        html.append("                            • If you initially picked the car (1/3 chance), then switching will lead you to a goat.<br><br>\n");
+        html.append("                            So by switching, you win whenever your initial choice was a goat, which happens 2/3 of the time!\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+
+        html.append("                    <div class=\"explanation-section\">\n");
+        html.append("                        <div class=\"explanation-subtitle\">Still not convinced?</div>\n");
+        html.append("                        <div class=\"explanation-text\">\n");
+        html.append("                            Imagine that there are <span class=\"highlight\">100 doors</span> with the same conditions before. The car is behind one of the doors. You pick one.<br><br>\n");
+        html.append("                            Then, the host opens <span class=\"highlight\">98</span> of the remaining 99 doors, all revealing goats.<br><br>\n");
+        html.append("                            Now only two doors remain: the one you picked and one other unopened door.<br><br>\n");
+        html.append("                            Would you still stick with your original choice — a <span class=\"highlight\">1 in 100</span> chance — or switch to the other door, which now has a <span class=\"highlight\">99 in 100</span> chance of hiding the prize?\n");
+        html.append("                        </div>\n");
+        html.append("                    </div>\n");
+
+        html.append("                    <div class=\"stats-divider\"></div>\n");
+
+        html.append("                    <div class=\"explanation-text\">\n");
+        html.append("                        Play the game multiple times to see the probabilities in action, or use the auto-play feature to run many simulations.\n");
+        html.append("                    </div>\n");
         html.append("                </div>\n");
         html.append("            </div>\n");
+
         html.append("        </div>\n");
 
         html.append("    </div>\n");
