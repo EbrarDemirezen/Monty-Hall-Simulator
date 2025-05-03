@@ -133,9 +133,47 @@ public class HtmlGenerator {
         html.append(
                 "        .status:hover { transform: translateY(-2px); box-shadow: 0 4px 8px rgba(0,0,0,0.15); }\n");
         
-        html.append("        .result { margin: 20px 0; padding: 15px; border-radius: 5px; }\n");
-        html.append("        .win { background-color: #d5f5e3; color: #27ae60; }\n");
-        html.append("        .lose { background-color: #fadbd8; color: #c0392b; }\n");
+        html.append("        .result {\n");
+        html.append("            background: linear-gradient(145deg, rgba(0,0,0,0.8), rgba(20,20,20,0.9));\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            border-radius: 15px;\n");
+        html.append("            padding: 25px;\n");
+        html.append("            margin: 20px auto;\n");
+        html.append("            max-width: 800px;\n");
+        html.append("            position: relative;\n");
+        html.append("            overflow: hidden;\n");
+        html.append("            box-shadow: 0 0 30px rgba(255,215,0,0.15);\n");
+        html.append("        }\n");
+
+        html.append("        .result h2 {\n");
+        html.append("            font-family: 'Bungee', cursive;\n");
+        html.append("            font-size: 32px;\n");
+        html.append("            margin: 0 0 15px 0;\n");
+        html.append("            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\n");
+        html.append("            animation: resultGlow 2s ease-in-out infinite alternate;\n");
+        html.append("        }\n");
+
+        html.append("        .result p {\n");
+        html.append("            font-family: 'Press Start 2P', cursive;\n");
+        html.append("            font-size: 14px;\n");
+        html.append("            margin: 10px 0;\n");
+        html.append("            color: #FFD700;\n");
+        html.append("            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);\n");
+        html.append("        }\n");
+
+        html.append("        .win h2 {\n");
+        html.append("            color: #4CAF50;\n");
+        html.append("        }\n");
+
+        html.append("        .lose h2 {\n");
+        html.append("            color: #FF5252;\n");
+        html.append("        }\n");
+
+        html.append("        @keyframes resultGlow {\n");
+        html.append("            from { text-shadow: 0 0 10px rgba(255,215,0,0.5), 0 0 20px rgba(255,215,0,0.3); }\n");
+        html.append("            to { text-shadow: 0 0 20px rgba(255,215,0,0.8), 0 0 30px rgba(255,215,0,0.6); }\n");
+        html.append("        }\n");
+
         html.append("        .statistics { margin-top: 30px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }\n");
         html.append("        .stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 15px; }\n");
         html.append("        .stat-box { padding: 15px; border-radius: 5px; }\n");
@@ -496,16 +534,15 @@ public class HtmlGenerator {
 
         // Game result (if game is over)
         if (gameOver) {
-            html.append("        <div class=\"result ").append(controller.getGameState().hasWon() ? "win" : "lose")
-                    .append("\">\n");
+            html.append("        <div class=\"result ").append(controller.getGameState().hasWon() ? "win" : "lose").append("\">\n");
             if (controller.getGameState().hasWon()) {
-                html.append("            <h2>Congratulations! You WON! 🎉</h2>\n");
+                html.append("            <h2>🏆 Congratulations! You WON! 🎉</h2>\n");
             } else {
-                html.append("            <h2>Sorry! You LOST! 😢</h2>\n");
+                html.append("            <h2>💔 Sorry! You LOST! 😢</h2>\n");
             }
             html.append("            <p>You ").append(
                     controller.getGameState().hasSwitched() ? "switched doors" : "stayed with your initial choice")
-                    .append(".</p>\n");
+                    .append("</p>\n");
             html.append("        </div>\n");
         }
 
