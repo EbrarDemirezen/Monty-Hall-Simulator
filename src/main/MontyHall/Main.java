@@ -54,8 +54,9 @@ public class Main {
 
                 switch (action) {
                     case "reset":
-                        gameController.resetGame();
+                        gameController.resetAllStats(); // Use the new method instead of just resetGame()
                         break;
+                    // ... other cases ...
                     case "choose":
                         if (params.containsKey("door")) {
                             try {
@@ -79,18 +80,6 @@ public class Main {
                                 gameController.runAutoPlay(iterations);
                             } catch (NumberFormatException e) {
                                 // Invalid iterations, ignore
-                            }
-                        }
-                        break;
-                    case "set-doors":
-                        if (params.containsKey("count")) {
-                            try {
-                                int count = Integer.parseInt(params.get("count"));
-                                if (count >= 3) { // Minimum 3 doors
-                                    gameController.setDoorCount(count);
-                                }
-                            } catch (NumberFormatException e) {
-                                // Invalid door count, ignore
                             }
                         }
                         break;

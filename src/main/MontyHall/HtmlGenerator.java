@@ -193,8 +193,6 @@ public class HtmlGenerator {
         html.append("        .tab-content.active { \n");
         html.append("            display: block; \n");
         html.append("        }\n");
-        html.append("        .options { margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 5px; text-align: left; }\n");
-        html.append("        .options label { margin-right: 10px; }\n");
         html.append("        .auto-play { margin-top: 20px; padding: 15px; background-color: #e8f8f8; border-radius: 5px; }\n");
         
         //!----------------------------------------------------------------------------------------------------------------------------------
@@ -503,6 +501,45 @@ public class HtmlGenerator {
         html.append("            text-shadow: 0 0 10px rgba(79,195,247,0.5);\n");
         html.append("        }\n");
 
+        // Add this to the style section:
+        html.append("        button.reset-button {\n");
+        html.append("            background: linear-gradient(45deg, #FF6B6B, #FF8E8E);\n");
+        html.append("            color: white;\n");
+        html.append("            border: 2px solid #FF6B6B;\n");
+        html.append("        }\n");
+        html.append("        button.reset-button:hover {\n");
+        html.append("            background: linear-gradient(45deg, #FF8E8E, #FF6B6B);\n");
+        html.append("            transform: translateY(-2px);\n");
+        html.append("        }\n");
+
+        // Add this CSS after the game-container styles:
+        html.append("        .reset-container {\n");
+        html.append("            position: fixed;\n");  // Change from absolute to fixed
+        html.append("            top: 10px;\n");           // Reduced from 20px to 10px to move it higher
+        html.append("            right: 10px;\n");         // Reduced from 20px to 10px to move it more to the right
+        html.append("            z-index: 9999;\n");    // Increase z-index to ensure it's always on top
+        html.append("        }\n");
+
+        // Update the reset button styles for better visibility:
+        html.append("        button.reset-button {\n");
+        html.append("            background: linear-gradient(45deg, #ff6b6b, #fa8072);\n");
+        html.append("            color: white;\n");
+        html.append("            font-weight: bold;\n");
+        html.append("            border: none;\n");
+        html.append("            padding: 8px 16px;\n");   // Reduced padding
+        html.append("            font-size: 12px;\n");     // Reduced font size
+        html.append("            border-radius: 4px;\n");   // Smaller border radius
+        html.append("            box-shadow: 0 2px 8px rgba(0,0,0,0.3);\n");
+        html.append("            transition: all 0.3s ease;\n");
+        html.append("            cursor: pointer;\n");
+        html.append("        }\n");
+
+        html.append("        button.reset-button:hover {\n");
+        html.append("            background: linear-gradient(45deg, #fa8072, #ff6b6b);\n");
+        html.append("            transform: translateY(-2px);\n");
+        html.append("            box-shadow: 0 4px 15px rgba(0,0,0,0.3);\n");
+        html.append("        }\n");
+
         html.append("    </style>\n");
         html.append("    <script>\n");
         html.append("        function toggleTab(tabId) {\n");
@@ -521,15 +558,17 @@ public class HtmlGenerator {
         html.append("            // Start with a reset\n");
         html.append("            window.location.href = '?action=auto-play&iterations=' + iterations;\n");
         html.append("        }\n");
-        html.append("        function setDoorCount(count) {\n");
-        html.append("            window.location.href = '?action=set-doors&count=' + count;\n");
-        html.append("        }\n");
         html.append("    </script>\n");
         html.append("</head>\n");
         html.append("<body>\n");
         html.append("    <h1>🐐 Monty Hall Simulator 🐐</h1>\n");
         html.append("    <p class=\"subtitle\">Put your luck and logic to the test!</p>\n");
         html.append("    <div class=\"game-container\">\n");
+
+        // Add this right after the <div class="game-container"> opening tag:
+        html.append("        <div class=\"reset-container\">\n");
+        html.append("            <button class=\"reset-button\" onclick=\"location.href='?action=reset'\">Reset Game</button>\n");
+        html.append("        </div>\n");
 
         // Game status message
         html.append("        <div class=\"status\" id=\"status\">\n");
@@ -557,7 +596,7 @@ public class HtmlGenerator {
         int revealedDoor = controller.getGameState().getRevealedDoor();
         int carPosition = controller.getGameState().getCarPosition();
 
-        for (int i = 0; i < controller.getDoorCount(); i++) {
+        for (int i = 0; i < 3; i++) {
             html.append("            <div class=\"door door-").append(i + 1);
             if (playerChoice == i)
                 html.append(" selected");
@@ -583,7 +622,6 @@ public class HtmlGenerator {
 
         // Game controls
         html.append("        <div class=\"controls\">\n");
-
         if (!gameStarted) {
             // Initial state - no buttons needed
         } else if (doorRevealed && !gameOver) {
@@ -592,10 +630,9 @@ public class HtmlGenerator {
                     .append(playerChoice + 1).append("</button>\n");
             html.append("            <button onclick=\"location.href='?action=switch'\">Switch Door</button>\n");
         } else if (gameOver) {
-            // Game over - reset button
+            // Game over - only play again button
             html.append("            <button onclick=\"location.href='?action=reset'\">Play Again</button>\n");
         }
-
         html.append("        </div>\n");
 
         // Game result (if game is over)
@@ -617,8 +654,6 @@ public class HtmlGenerator {
         html.append("            <div class=\"tab-buttons\">\n");
         html.append(
                 "                <button id=\"btn-tab-stats\" class=\"tab-button active\" onclick=\"toggleTab('tab-stats')\">Statistics</button>\n");
-        html.append(
-                "                <button id=\"btn-tab-options\" class=\"tab-button\" onclick=\"toggleTab('tab-options')\">Options</button>\n");
         html.append(
                 "                <button id=\"btn-tab-explanation\" class=\"tab-button\" onclick=\"toggleTab('tab-explanation')\">Explanation</button>\n");
         html.append("            </div>\n");
@@ -694,18 +729,6 @@ public class HtmlGenerator {
         html.append("                    </div>\n");
         html.append("                </div>\n"); // End of statistics-panel
 
-        html.append("            </div>\n");
-
-        // Options tab
-        html.append("            <div id=\"tab-options\" class=\"tab-content\">\n");
-        html.append("                <h3>Game Options</h3>\n");
-        html.append("                <div class=\"options\">\n");
-        html.append("                    <h4>Number of Doors:</h4>\n");
-        html.append("                    <p>Change the number of doors to experiment with different scenarios:</p>\n");
-        html.append("                    <button onclick=\"setDoorCount(3)\">3 Doors (Classic)</button>\n");
-        html.append("                    <button onclick=\"setDoorCount(4)\">4 Doors</button>\n");
-        html.append("                    <button onclick=\"setDoorCount(5)\">5 Doors</button>\n");
-        html.append("                </div>\n");
         html.append("            </div>\n");
 
         // Explanation tab

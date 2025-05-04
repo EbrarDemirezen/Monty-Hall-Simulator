@@ -17,27 +17,11 @@ public class GameController {
     private int switchGames = 0;
     
     public GameController() {
-        game = new GameLogic();
+        game = new GameLogic(); // GameLogic constructor should default to 3 doors
     }
     
     public void resetGame() {
         game.resetGame();
-    }
-    
-    public void setDoorCount(int count) {
-        // Reset statistics when changing door count
-        this.gamesPlayed = 0;
-        this.stayWins = 0;
-        this.switchWins = 0;
-        this.stayGames = 0;
-        this.switchGames = 0;
-        
-        // Create a new game with specified door count
-        this.game = new GameLogic(count);
-    }
-    
-    public int getDoorCount() {
-        return game.getDoorCount();
     }
     
     public void makeInitialChoice(int doorNumber) {
@@ -67,10 +51,10 @@ public class GameController {
         
         for (int i = 0; i < iterations; i++) {
             // Create a single game instance for each iteration
-            GameLogic game = new GameLogic(this.game.getDoorCount());
+            GameLogic game = new GameLogic(); // Remove door count parameter
             
             // Make random initial choice
-            int initialChoice = random.nextInt(game.getDoorCount());
+            int initialChoice = random.nextInt(3); // Hardcode to 3 doors
             game.makeInitialChoice(initialChoice);
             
             // Randomly decide whether to stay or switch
@@ -143,7 +127,7 @@ public class GameController {
     public double getSwitchWinRate() {
         return switchGames > 0 ? (double) switchWins / switchGames * 100 : 0;
     }
-//!-------------------------------------------------------------------
+
     // Add these two new getter methods
     public int getStayGames() {
         return stayGames;
@@ -151,5 +135,14 @@ public class GameController {
 
     public int getSwitchGames() {
         return switchGames;
+    }
+
+    public void resetAllStats() {
+        this.gamesPlayed = 0;
+        this.stayWins = 0;
+        this.switchWins = 0;
+        this.stayGames = 0;
+        this.switchGames = 0;
+        resetGame(); // Reset the current game state as well
     }
 }
