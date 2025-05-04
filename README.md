@@ -51,13 +51,13 @@ Future Plans:
 
 ## 📌 Features Planned
 
-* Interactive 3-door game interface
-* Option to switch or stay
-* Real-time stats tracker (win ratio for switch vs. stay)
-* Game reset and retry options
+* Interactive 3-door game interface ✅
+* Option to switch or stay ✅
+* Real-time stats tracker (win ratio for switch vs. stay) ✅
+* Game reset and retry options ✅
 * Clean animations (door opening) and visual feedback
 * Sound effects
-* A section explaining the logic behind the Monty Hall problem
+* A section explaining the logic behind the Monty Hall problem ✅
 
 ## 📅 Weekly Milestones
 
