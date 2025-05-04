@@ -146,10 +146,3 @@ public class GameController {
         resetGame(); // Reset the current game state as well
     }
 }
-        return stayGames;
-    }
-
-    public int getSwitchGames() {
-        return switchGames;
-    }
-}

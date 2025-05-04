@@ -783,4 +783,20 @@ public class HtmlGenerator {
         html.append("                        </div>\n");
         html.append("                    </div>\n");
 
-        html.append("                    <div class=\"stats-divider\"></div>... (1 KB kvar)
+        html.append("                    <div class=\"stats-divider\"></div>\n");
+
+        html.append("                    <div class=\"explanation-text\">\n");
+        html.append("                        Play the game multiple times to see the probabilities in action, or use the auto-play feature to run many simulations.\n");
+        html.append("                    </div>\n");
+        html.append("                </div>\n");
+        html.append("            </div>\n");
+
+        html.append("        </div>\n");
+
+        html.append("    </div>\n");
+        html.append("</body>\n");
+        html.append("</html>\n");
+
+        return html.toString();
+    }
+}
