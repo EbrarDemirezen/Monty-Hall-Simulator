@@ -496,6 +496,36 @@ public class HtmlGenerator {
         html.append("            box-shadow: 0 4px 15px rgba(0,0,0,0.3);\n");
         html.append("        }\n");
 
+        // Add after the reset-button styles:
+        html.append("        .sound-control {\n");
+        html.append("            position: fixed;\n");
+        html.append("            top: 15px;\n");
+        html.append("            left: 15px;\n");
+        html.append("            z-index: 9999;\n");
+        html.append("            cursor: pointer;\n");
+        html.append("            width: 40px;\n");
+        html.append("            height: 40px;\n");
+        html.append("            background: linear-gradient(145deg, #1a1a1a, #2c3e50);\n");
+        html.append("            border: 2px solid #FFD700;\n");
+        html.append("            border-radius: 50%;\n");
+        html.append("            display: flex;\n");
+        html.append("            align-items: center;\n");
+        html.append("            justify-content: center;\n");
+        html.append("            transition: all 0.3s ease;\n");
+        html.append("            box-shadow: 0 2px 8px rgba(0,0,0,0.3);\n");
+        html.append("        }\n");
+        html.append("        .sound-control:hover {\n");
+        html.append("            transform: translateY(-2px);\n");
+        html.append("            box-shadow: 0 4px 15px rgba(255,215,0,0.3);\n");
+        html.append("        }\n");
+        html.append("        .sound-control svg {\n");
+        html.append("            width: 24px;\n");
+        html.append("            height: 24px;\n");
+        html.append("            fill: #FFD700;\n");
+        html.append("        }\n");
+        html.append("        .sound-control.muted .unmuted-icon { display: none; }\n");
+        html.append("        .sound-control:not(.muted) .muted-icon { display: none; }\n");
+
         html.append("    </style>\n");
         // --- JAVASCRIPT ---
         html.append("    <script>\n");
@@ -519,10 +549,12 @@ public class HtmlGenerator {
 
         // Add JavaScript functions for playing sounds (add this in the <script> section):
         html.append("        function playSound(soundId) {\n");
-        html.append("            const sound = document.getElementById(soundId);\n");
-        html.append("            if (sound) {\n");
-        html.append("                sound.currentTime = 0; // Reset the audio to start\n");
-        html.append("                sound.play();\n");
+        html.append("            if (localStorage.getItem('isMuted') !== 'true') {\n");
+        html.append("                const sound = document.getElementById(soundId);\n");
+        html.append("                if (sound) {\n");
+        html.append("                    sound.currentTime = 0;\n");
+        html.append("                    sound.play();\n");
+        html.append("                }\n");
         html.append("            }\n");
         html.append("        }\n");
 
@@ -551,6 +583,32 @@ public class HtmlGenerator {
         html.append("            }\n");
         html.append("        });\n");
 
+        // Add to the <script> section:
+        html.append("        // Initialize mute state from localStorage\n");
+        html.append("        let isMuted = localStorage.getItem('isMuted') === 'true';\n");
+        html.append("        \n");
+        html.append("        // Apply initial mute state on page load\n");
+        html.append("        document.addEventListener('DOMContentLoaded', () => {\n");
+        html.append("            const soundControl = document.getElementById('sound-control');\n");
+        html.append("            if (isMuted) {\n");
+        html.append("                soundControl.classList.add('muted');\n");
+        html.append("                const sounds = document.getElementsByTagName('audio');\n");
+        html.append("                for (let sound of sounds) {\n");
+        html.append("                    sound.muted = true;\n");
+        html.append("                }\n");
+        html.append("            }\n");
+        html.append("        });\n");
+        html.append("        \n");
+        html.append("        function toggleMute() {\n");
+        html.append("            isMuted = !isMuted;\n");
+        html.append("            localStorage.setItem('isMuted', isMuted);\n");
+        html.append("            document.getElementById('sound-control').classList.toggle('muted');\n");
+        html.append("            const sounds = document.getElementsByTagName('audio');\n");
+        html.append("            for (let sound of sounds) {\n");
+        html.append("                sound.muted = isMuted;\n");
+        html.append("            }\n");
+        html.append("        }\n");
+
         html.append("    </script>\n");
         // First, add the audio elements in the HTML head section after the existing scripts:
         html.append("    <audio id=\"goatSound\" src=\"/sounds/goat.mp3\"></audio>\n");
@@ -566,6 +624,15 @@ public class HtmlGenerator {
         // Reset Button (Placed early for fixed positioning)
         html.append("        <div class=\"reset-container\">\n");
         html.append("            <button class=\"reset-button\" onclick=\"location.href='?action=reset'\">Reset Stats</button>\n");
+        html.append("        </div>\n");
+
+        html.append("        <div id=\"sound-control\" class=\"sound-control\" onclick=\"toggleMute()\">\n");
+        html.append("            <svg class=\"unmuted-icon\" viewBox=\"0 0 24 24\">\n");
+        html.append("                <path d=\"M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z\"/>\n");
+        html.append("            </svg>\n");
+        html.append("            <svg class=\"muted-icon\" viewBox=\"0 0 24 24\">\n");
+        html.append("                <path d=\"M16.5 12c0-1.77-1.02-3.29-2.5-4.03v2.21l2.45 2.45c.03-.2.05-.41.05-.63zm2.5 0c0 .94-.2 1.82-.54 2.64l1.51 1.51C20.63 14.91 21 13.5 21 12c0-4.28-2.99-7.86-7-8.77v2.06c2.89.86 5 3.54 5 6.71zM4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.25 4.25c-.67.52-1.42.93-2.25 1.18v2.06c1.38-.31 2.63-.95 3.69-1.81L19.73 21 21 19.73l-9-9L4.27 3zM12 4L9.91 6.09 12 8.18V4z\"/>\n");
+        html.append("            </svg>\n");
         html.append("        </div>\n");
 
         // Game status message
@@ -620,11 +687,13 @@ public class HtmlGenerator {
                 doorClasses += " selected";
             }
             // Apply reveal/open animation classes
-            // 1. First, modify the door reveal sound logic to only play for non-game-over reveals
-            if (revealedDoor == i && !gameOver) {
+            if (revealedDoor == i) {
                 doorClasses += " revealed"; // Host revealing a goat
-                html.append("                <script>playSound('doorSound'); setTimeout(() => playSound('goatSound'), 800);</script>\n");
-            } else if (gameOver) {
+                // Only play reveal sounds if this is Monty's reveal (not game over)
+                if (!gameOver) {
+                    html.append("                <script>playSound('doorSound'); setTimeout(() => playSound('goatSound'), 800);</script>\n");
+                }
+            } else if (gameOver) { // Changed condition to open all doors at game over
                 doorClasses += " opened";
             }
 
@@ -666,13 +735,10 @@ public class HtmlGenerator {
         // --- Game Result ---
         if (gameOver) {
             html.append("        <div class=\"result ").append(controller.getGameState().hasWon() ? "win" : "lose").append("\">\n");
-            // Add script to play game over sounds based on win/loss condition
-            html.append("        <script>\n");
-            html.append("            playSound('doorSound');\n");
-            html.append("            setTimeout(() => {\n");
-            html.append("                playSound('" + (controller.getGameState().hasWon() ? "carSound" : "goatSound") + "');\n");
-            html.append("            }, 800);\n");
-            html.append("        </script>\n");
+            // Only play game over sounds for the player's final choice
+            if (playerChoice == carPosition || playerChoice == (3 - revealedDoor - carPosition)) {
+                html.append("        <script>playGameOverSounds(" + controller.getGameState().hasWon() + ");</script>\n");
+            }
             if (controller.getGameState().hasWon()) {
                 html.append("            <h2>🏆 Congratulations! You WON! 🎉</h2>\n");
             } else {
