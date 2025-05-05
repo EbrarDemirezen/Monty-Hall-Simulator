@@ -26,6 +26,8 @@ public class Main {
 
             // Add handler for static files
             server.createContext("/images", new StaticFileHandler("src/main/resources/static/images"));
+            // Add another context for sounds
+            server.createContext("/sounds", new StaticFileHandler("src/main/resources/static/sounds"));
 
             // Create a context for handling requests
             server.createContext("/", new GameHandler());
