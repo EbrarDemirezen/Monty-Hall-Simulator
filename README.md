@@ -1,3 +1,4 @@
+[View Screenshots](Screenshots.md)
 # 🐐 Monty Hall Simulator – Gamifying the Monty Hall Problem 🐐
 
 In this project, our goal is to create an interactive app/website designed to explore the famous probability puzzle known as the Monty Hall Problem. Inspired by the classic game show scenario, our aim is to give the users a chance to test their intuition, learn about probability, and have fun while doing it.
