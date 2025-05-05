@@ -81,9 +81,9 @@ public class HtmlGenerator {
         html.append("            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);\n");
         html.append("        }\n");
 
-        html.append("        .doors-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; }\n");
+        html.append("        .doors-container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin: 30px 0; perspective: 1200px; }\n");
         //!       
-        html.append("        .door { width: 170px; height: 260px; background-size: contain; background-repeat: no-repeat; background-position: center; cursor: pointer; position: relative; transition: all 0.3s ease; margin: 10px; }\n");
+        html.append("        .door { width: 170px; height: 260px; background-size: contain; background-repeat: no-repeat; background-position: center; cursor: pointer; position: relative; transition: all 0.3s ease; margin: 10px; transform-origin: left; transform-style: preserve-3d; }\n");
         //!
         // Only apply hover effect when no door is selected (before first choice)
         html.append("        .doors-container:not(:has(.selected)) .door:hover { border: 4px solid #f1c40f; box-shadow: 0 0 15px #f1c40f; }\n");
@@ -538,6 +538,72 @@ public class HtmlGenerator {
         html.append("            background: linear-gradient(45deg, #fa8072, #ff6b6b);\n");
         html.append("            transform: translateY(-2px);\n");
         html.append("            box-shadow: 0 4px 15px rgba(0,0,0,0.3);\n");
+        html.append("        }\n");
+
+        // Add these new animation styles
+        html.append("        @keyframes openDoor {\n");
+        html.append("            0% { transform: perspective(1200px) rotateY(0deg); }\n");
+        html.append("            100% { transform: perspective(1200px) rotateY(-105deg); }\n");
+        html.append("        }\n");
+
+        html.append("        @keyframes revealDoor {\n");
+        html.append("            0% { transform: perspective(1200px) rotateY(0deg); }\n");
+        html.append("            100% { transform: perspective(1200px) rotateY(-65deg); }\n");
+        html.append("        }\n");
+
+        html.append("        .door.revealed {\n");
+        html.append("            animation: revealDoor 0.8s ease-in-out forwards;\n");
+        html.append("            transform-origin: left;\n");
+        html.append("        }\n");
+
+        html.append("        .door.opened {\n");
+        html.append("            animation: openDoor 1s ease-in-out forwards;\n");
+        html.append("            transform-origin: left;\n");
+        html.append("        }\n");
+
+        // Modify the door-content styles
+        html.append("        .door-content {\n");
+        html.append("            display: none;\n");
+        html.append("            position: absolute;\n");
+        html.append("            top: 50%;\n");
+        html.append("            left: 50%;\n");
+        html.append("            transform: translate(-50%, -50%) rotateY(65deg);\n");
+        html.append("            font-size: 40px;\n");
+        html.append("            perspective: 1000px;\n");
+        html.append("            transform-style: preserve-3d;\n");
+        html.append("            backface-visibility: hidden;\n");
+        html.append("        }\n");
+
+        // Add animation for the content appearing
+        html.append("        @keyframes contentAppear {\n");
+        html.append("            0% { opacity: 0; transform: translate(-50%, -50%) rotateY(65deg) scale(0.5); }\n");
+        html.append("            100% { opacity: 1; transform: translate(-50%, -50%) rotateY(65deg) scale(1); }\n");
+        html.append("        }\n");
+
+        // Modify the revealed and opened content styles
+        html.append("        .door.revealed .door-content,\n");
+        html.append("        .door.opened .door-content {\n");
+        html.append("            display: block;\n");
+        html.append("            animation: contentAppear 0.5s ease-in-out 0.3s forwards;\n");
+        html.append("            opacity: 0;\n");
+        html.append("        }\n");
+
+        // Add shadow effect for more depth
+        html.append("        .door::after {\n");
+        html.append("            content: '';\n");
+        html.append("            position: absolute;\n");
+        html.append("            top: 0;\n");
+        html.append("            left: 0;\n");
+        html.append("            width: 100%;\n");
+        html.append("            height: 100%;\n");
+        html.append("            background: linear-gradient(90deg, rgba(0,0,0,0.2), transparent);\n");
+        html.append("            opacity: 0;\n");
+        html.append("            transition: opacity 0.3s;\n");
+        html.append("        }\n");
+
+        html.append("        .door.revealed::after,\n");
+        html.append("        .door.opened::after {\n");
+        html.append("            opacity: 1;\n");
         html.append("        }\n");
 
         html.append("    </style>\n");
