@@ -516,7 +516,46 @@ public class HtmlGenerator {
         html.append("        document.addEventListener('DOMContentLoaded', () => {\n");
         html.append("            toggleTab('tab-stats'); // Default to statistics tab\n");
         html.append("        });\n");
+
+        // Add JavaScript functions for playing sounds (add this in the <script> section):
+        html.append("        function playSound(soundId) {\n");
+        html.append("            const sound = document.getElementById(soundId);\n");
+        html.append("            if (sound) {\n");
+        html.append("                sound.currentTime = 0; // Reset the audio to start\n");
+        html.append("                sound.play();\n");
+        html.append("            }\n");
+        html.append("        }\n");
+
+        // Add function to play multiple sounds with delay
+        html.append("        function playGameOverSounds(hasWon) {\n");
+        html.append("            playSound('doorSound');\n");
+        html.append("            setTimeout(() => {\n");
+        html.append("                if (hasWon) {\n");
+        html.append("                    playSound('carSound');\n");
+        html.append("                } else {\n");
+        html.append("                    playSound('goatSound');\n");
+        html.append("                }\n");
+        html.append("            }, 1000); // Delay second sound by 1 second\n");
+        html.append("        }\n");
+
+        // Add autoplay attribute to ensure sounds can play
+        html.append("        document.addEventListener('DOMContentLoaded', () => {\n");
+        html.append("            toggleTab('tab-stats');\n");
+        html.append("            // Enable sound autoplay\n");
+        html.append("            const sounds = document.getElementsByTagName('audio');\n");
+        html.append("            for (let sound of sounds) {\n");
+        html.append("                sound.play().then(() => {\n");
+        html.append("                    sound.pause();\n");
+        html.append("                    sound.currentTime = 0;\n");
+        html.append("                }).catch(e => console.log('Audio autoplay failed'));\n");
+        html.append("            }\n");
+        html.append("        });\n");
+
         html.append("    </script>\n");
+        // First, add the audio elements in the HTML head section after the existing scripts:
+        html.append("    <audio id=\"goatSound\" src=\"/sounds/goat.mp3\"></audio>\n");
+        html.append("    <audio id=\"carSound\" src=\"/sounds/car.mp3\"></audio>\n");
+        html.append("    <audio id=\"doorSound\" src=\"/sounds/door.mp3\"></audio>\n");
         html.append("</head>\n");
         // --- HTML BODY ---
         html.append("<body>\n");
@@ -581,9 +620,11 @@ public class HtmlGenerator {
                 doorClasses += " selected";
             }
             // Apply reveal/open animation classes
-            if (revealedDoor == i) {
+            // 1. First, modify the door reveal sound logic to only play for non-game-over reveals
+            if (revealedDoor == i && !gameOver) {
                 doorClasses += " revealed"; // Host revealing a goat
-            } else if (gameOver) { // Changed condition to open all doors at game over
+                html.append("                <script>playSound('doorSound'); setTimeout(() => playSound('goatSound'), 800);</script>\n");
+            } else if (gameOver) {
                 doorClasses += " opened";
             }
 
@@ -625,6 +666,13 @@ public class HtmlGenerator {
         // --- Game Result ---
         if (gameOver) {
             html.append("        <div class=\"result ").append(controller.getGameState().hasWon() ? "win" : "lose").append("\">\n");
+            // Add script to play game over sounds based on win/loss condition
+            html.append("        <script>\n");
+            html.append("            playSound('doorSound');\n");
+            html.append("            setTimeout(() => {\n");
+            html.append("                playSound('" + (controller.getGameState().hasWon() ? "carSound" : "goatSound") + "');\n");
+            html.append("            }, 800);\n");
+            html.append("        </script>\n");
             if (controller.getGameState().hasWon()) {
                 html.append("            <h2>🏆 Congratulations! You WON! 🎉</h2>\n");
             } else {
