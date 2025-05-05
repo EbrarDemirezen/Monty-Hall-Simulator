@@ -17,27 +17,11 @@ public class GameController {
     private int switchGames = 0;
     
     public GameController() {
-        game = new GameLogic();
+        game = new GameLogic(); // GameLogic constructor should default to 3 doors
     }
     
     public void resetGame() {
         game.resetGame();
-    }
-    
-    public void setDoorCount(int count) {
-        // Reset statistics when changing door count
-        this.gamesPlayed = 0;
-        this.stayWins = 0;
-        this.switchWins = 0;
-        this.stayGames = 0;
-        this.switchGames = 0;
-        
-        // Create a new game with specified door count
-        this.game = new GameLogic(count);
-    }
-    
-    public int getDoorCount() {
-        return game.getDoorCount();
     }
     
     public void makeInitialChoice(int doorNumber) {
@@ -66,30 +50,31 @@ public class GameController {
         Random random = new Random();
         
         for (int i = 0; i < iterations; i++) {
-            // Create two separate games to test both strategies
-            GameLogic stayGame = new GameLogic(game.getDoorCount());
-            GameLogic switchGame = new GameLogic(game.getDoorCount());
+            // Create a single game instance for each iteration
+            GameLogic game = new GameLogic(); // Remove door count parameter
             
-            // Make random initial choices for both games
-            int initialChoice = random.nextInt(game.getDoorCount());
-            stayGame.makeInitialChoice(initialChoice);
-            switchGame.makeInitialChoice(initialChoice);
+            // Make random initial choice
+            int initialChoice = random.nextInt(3); // Hardcode to 3 doors
+            game.makeInitialChoice(initialChoice);
             
-            // Apply stay strategy
-            stayGame.stayWithCurrentChoice();
-            stayGames++;
-            if (stayGame.hasWon()) {
-                stayWins++;
+            // Randomly decide whether to stay or switch
+            boolean shouldSwitch = random.nextBoolean();
+            
+            if (shouldSwitch) {
+                game.switchDoor();
+                switchGames++;
+                if (game.hasWon()) {
+                    switchWins++;
+                }
+            } else {
+                game.stayWithCurrentChoice();
+                stayGames++;
+                if (game.hasWon()) {
+                    stayWins++;
+                }
             }
             
-            // Apply switch strategy
-            switchGame.switchDoor();
-            switchGames++;
-            if (switchGame.hasWon()) {
-                switchWins++;
-            }
-            
-            gamesPlayed += 2;
+            gamesPlayed++;
         }
         
         // Reset the current game so player can start fresh
@@ -141,5 +126,23 @@ public class GameController {
     
     public double getSwitchWinRate() {
         return switchGames > 0 ? (double) switchWins / switchGames * 100 : 0;
+    }
+
+    // Add these two new getter methods
+    public int getStayGames() {
+        return stayGames;
+    }
+
+    public int getSwitchGames() {
+        return switchGames;
+    }
+
+    public void resetAllStats() {
+        this.gamesPlayed = 0;
+        this.stayWins = 0;
+        this.switchWins = 0;
+        this.stayGames = 0;
+        this.switchGames = 0;
+        resetGame(); // Reset the current game state as well
     }
 }

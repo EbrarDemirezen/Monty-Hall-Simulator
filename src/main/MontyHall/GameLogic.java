@@ -2,7 +2,7 @@ package src.main.MontyHall;
 import java.util.Random;
 
 public class GameLogic {
-    private int doorCount;
+    private static final int DOOR_COUNT = 3; // Make this a constant
     private int carPosition;
     private int playerChoice;
     private int revealedDoor;
@@ -13,22 +13,14 @@ public class GameLogic {
     private Random random;
     
     public GameLogic() {
-        this(3); // Default to 3 doors
-    }
-    
-    public GameLogic(int doorCount) {
-        if (doorCount < 3) {
-            throw new IllegalArgumentException("Game requires at least 3 doors");
-        }
-        this.doorCount = doorCount;
         this.random = new Random();
         this.gameOver = false;
         resetGame();
     }
     
     public void resetGame() {
-        // Place the car behind a random door (0 to doorCount-1)
-        this.carPosition = random.nextInt(doorCount);
+        // Place the car behind a random door (0 to 2)
+        this.carPosition = random.nextInt(DOOR_COUNT);
         this.playerChoice = -1;
         this.revealedDoor = -1;
         this.gameOver = false;
@@ -37,45 +29,23 @@ public class GameLogic {
     }
     
     public void makeInitialChoice(int doorNumber) {
-        if (doorNumber < 0 || doorNumber >= doorCount) {
-            throw new IllegalArgumentException("Door choice must be between 0 and " + (doorCount - 1));
+        if (doorNumber < 0 || doorNumber >= DOOR_COUNT) {
+            throw new IllegalArgumentException("Door choice must be between 0 and 2");
         }
         this.playerChoice = doorNumber;
-        
-        // Host reveals a goat door (not the player's choice and not containing the car)
         revealGoatDoor();
     }
     
     private void revealGoatDoor() {
-        // Host needs to reveal a door that:
-        // 1. Is not the player's choice
-        // 2. Does not contain the car
-        // 3. Is a valid door number
-        
-        // Find all valid doors that can be revealed
-        int[] revealableDoors = new int[doorCount - 1]; // At most doorCount-1 doors can be revealed
-        int count = 0;
-        
-        for (int i = 0; i < doorCount; i++) {
+        // Simplified logic for 3 doors
+        for (int i = 0; i < DOOR_COUNT; i++) {
             if (i != playerChoice && i != carPosition) {
-                revealableDoors[count++] = i;
+                this.revealedDoor = i;
+                return;
             }
         }
-        
-        // Choose one door to reveal randomly from valid options
-        if (count > 0) {
-            this.revealedDoor = revealableDoors[random.nextInt(count)];
-        } else {
-            // Special case: if player chose the car door, host can reveal any other door
-            int[] otherDoors = new int[doorCount - 1];
-            count = 0;
-            for (int i = 0; i < doorCount; i++) {
-                if (i != playerChoice) {
-                    otherDoors[count++] = i;
-                }
-            }
-            this.revealedDoor = otherDoors[random.nextInt(count)];
-        }
+        // If player chose the car, reveal any other door
+        this.revealedDoor = (playerChoice + 1) % DOOR_COUNT;
     }
     
     public void stayWithCurrentChoice() {
@@ -92,23 +62,12 @@ public class GameLogic {
             throw new IllegalStateException("Player must make an initial choice first");
         }
         
-        // Find available doors (not player's current choice and not revealed)
-        int[] availableDoors = new int[doorCount - 2]; // Current choice and revealed door are not available
-        int count = 0;
-        
-        for (int i = 0; i < doorCount; i++) {
+        // In 3-door case, switch to the only remaining door
+        for (int i = 0; i < DOOR_COUNT; i++) {
             if (i != playerChoice && i != revealedDoor) {
-                availableDoors[count++] = i;
+                playerChoice = i;
+                break;
             }
-        }
-        
-        // In the classic 3-door case, there's only one door to switch to
-        if (count == 1) {
-            playerChoice = availableDoors[0];
-        } else if (count > 1) {
-            // In case of more than 3 doors, player might need to choose which door to switch to
-            // For simplicity, we'll just pick randomly here
-            playerChoice = availableDoors[random.nextInt(count)];
         }
         
         this.switched = true;
@@ -121,10 +80,6 @@ public class GameLogic {
     }
     
     // Getters
-    public int getDoorCount() {
-        return doorCount;
-    }
-    
     public int getPlayerChoice() {
         return playerChoice;
     }
@@ -146,10 +101,6 @@ public class GameLogic {
     }
     
     public int getCarPosition() {
-        /* // Only return car position if game is over
-        if (!gameOver) {
-            throw new IllegalStateException("Game is not over yet");
-        } */
         return carPosition;
     }
 }
