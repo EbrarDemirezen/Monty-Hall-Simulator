@@ -26,6 +26,8 @@ public class Main {
 
             // Add handler for static files
             server.createContext("/images", new StaticFileHandler("src/main/resources/static/images"));
+            // Add another context for sounds
+            server.createContext("/sounds", new StaticFileHandler("src/main/resources/static/sounds"));
 
             // Create a context for handling requests
             server.createContext("/", new GameHandler());
@@ -54,9 +56,11 @@ public class Main {
 
                 switch (action) {
                     case "reset":
-                        gameController.resetAllStats(); // Use the new method instead of just resetGame()
+                        gameController.resetAllStats(); // This should only be called for the "Reset Stats" button
                         break;
-                    // ... other cases ...
+                    case "play-again": // New action for the "Play Again" button
+                        gameController.resetGame(); // Only reset the current game, not the stats
+                        break;
                     case "choose":
                         if (params.containsKey("door")) {
                             try {
