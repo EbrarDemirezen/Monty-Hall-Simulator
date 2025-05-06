@@ -37,18 +37,11 @@ To build a fun and educational application that simulates the Monty Hall problem
 
 This project is primarily built with Java for core game logic and will be extended with web technologies to make it interactive and accessible via a browser.
 
-* **Java** – Backend, the core logic of the Monty Hall simulation
-* **HTML/CSS/JavaScript** – Frontend UI and interactive elements (to be decided)
+* **Java** – Backend, the core logic of the Monty Hall simulation and lightweight HTTP server library from Java SE
+* **HTML/CSS/JavaScript** – Frontend UI and interactive elements
 * **GitHub** – Project planning, collaboration, and issue tracking
-* **Libraries, frameworks** - (to be decided)
 * **AI Image Generators** - Some visual assets, including UI illustrations and icons, were generated using AI tools (Leonardo.Ai / Adobe Firefly)
 
-## 🚀 Installation & Usage
-
-**Note:** This section will evolve as the project progresses.
-
-Future Plans:
-* An easy-to-use web-based interface
 
 ## 📌 Features Planned
 
@@ -56,8 +49,8 @@ Future Plans:
 * Option to switch or stay ✅
 * Real-time stats tracker (win ratio for switch vs. stay) ✅
 * Game reset and retry options ✅
-* Clean animations (door opening) and visual feedback
-* Sound effects
+* Clean animations (door opening) and visual feedback ✅
+* Sound effects ✅
 * A section explaining the logic behind the Monty Hall problem ✅
 
 ## 📅 Weekly Milestones
